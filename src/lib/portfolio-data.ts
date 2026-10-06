@@ -33,7 +33,7 @@ export const NAV_LINKS = [
 ];
 
 export const STATS = [
-  { value: "7+", label: "Projects" },
+  { value: "5+", label: "Projects" },
   { value: "12+", label: "Technologies" },
   { value: "10+", label: "Certifications" },
   { value: "3", label: "Leadership Roles" },
@@ -84,7 +84,9 @@ export interface ExperienceItem {
   company: string;
   period: string;
   current?: boolean;
+  description?: string;
   points: string[];
+  tags?: string[];
 }
 
 export const EXPERIENCES: ExperienceItem[] = [
@@ -93,13 +95,22 @@ export const EXPERIENCES: ExperienceItem[] = [
     company: "Quantum Insight Labs Pvt. Ltd. — IIT Delhi",
     period: "2026 — Present",
     current: true,
+    description:
+      "Currently working at Quantum Insight Labs Pvt. Ltd. at IIT Delhi on quantum technology, scientific systems, and machine learning projects. My work involves hands-on exposure to quantum hardware, quantum communication systems, scientific software, experimental data processing, and hardware-software integration.",
     points: [
-      "Currently working on quantum technology and machine learning projects at Quantum Insight Labs in collaboration with IIT Delhi.",
-      "Developing, testing, and integrating quantum computing, quantum communication, simulation, and machine learning systems, with hands-on work across both software and physical quantum devices.",
-      "Hands-on work on the QForge 24 project involving quantum computing and quantum hardware experimentation.",
-      "Contributing to the Infinity project spanning quantum technology experimentation, scientific software, and device interaction.",
-      "Working on Quantum Key Distribution (QKD) projects focused on quantum communication and secure key exchange.",
-      "Conducting machine learning experimentation, model development, data processing, and hardware-software integration.",
+      "QForge 24 — Hands-on work with quantum hardware and device experimentation, including interaction with the physical system and related scientific software.",
+      "Infinity — Worked with quantum technology systems involving experimentation, scientific software, simulation, and device interaction.",
+      "QKD (Quantum Key Distribution) — Worked on Quantum Key Distribution systems involving quantum communication and secure key exchange concepts, including software and hardware integration.",
+      "Machine Learning — Worked on machine learning workflows involving experimental data processing, model development, analysis, and integration with scientific/quantum systems.",
+    ],
+    tags: [
+      "QForge 24",
+      "Infinity",
+      "QKD",
+      "Quantum Computing",
+      "Machine Learning",
+      "Scientific Simulation",
+      "Device Integration",
     ],
   },
   {
@@ -125,30 +136,10 @@ export const EXPERIENCES: ExperienceItem[] = [
 
 export const PROJECTS = [
   {
-    title: "Quantum Hardware & Device Simulation (QForge 24 & Infinity)",
-    description:
-      "Hands-on quantum hardware experimentation with the QForge 24 device, scientific simulation software, and physical device interaction workflows.",
-    image: project5,
-    tags: ["Quantum Computing", "QForge 24", "Infinity", "Device Integration", "Simulation"],
-    category: "Quantum & ML",
-    demo: "",
-    github: "",
-  },
-  {
-    title: "QKD & Machine Learning Research Systems",
-    description:
-      "Quantum Key Distribution systems focused on quantum communication and secure key exchange, combined with machine learning pipelines for experimental data processing.",
-    image: project1,
-    tags: ["QKD", "Quantum Communication", "Machine Learning", "Python", "R&D"],
-    category: "Quantum & ML",
-    demo: "",
-    github: "",
-  },
-  {
     title: "AI Powered SaaS Dashboard",
     description:
       "Production SaaS interface with realtime analytics, role-based access, and LLM-powered insights.",
-    image: project2,
+    image: project1,
     tags: ["Next.js", "OpenAI", "PostgreSQL", "Tailwind"],
     category: "Full Stack",
     demo: "",
@@ -158,7 +149,7 @@ export const PROJECTS = [
     title: "Online Examination & Result System",
     description:
       "Secure exam delivery with auto-grading, proctoring hooks, and instant result dashboards.",
-    image: project3,
+    image: project2,
     tags: ["React", "Node.js", "MongoDB", "JWT"],
     category: "Full Stack",
     demo: "",
@@ -168,7 +159,7 @@ export const PROJECTS = [
     title: "Placement Preparation Platform",
     description:
       "Curated DSA tracks, mock interviews, and progress analytics for engineering students.",
-    image: project4,
+    image: project3,
     tags: ["Next.js", "Prisma", "MySQL"],
     category: "EdTech",
     demo: "",
@@ -177,7 +168,7 @@ export const PROJECTS = [
   {
     title: "Marketing Agency Dashboard",
     description: "Internal command center for Brndfy — clients, campaigns, invoicing, and reports.",
-    image: project1,
+    image: project4,
     tags: ["React", "Express", "Recharts"],
     category: "Internal Tools",
     demo: "",
@@ -195,19 +186,12 @@ export const PROJECTS = [
   },
 ];
 
-export const PROJECT_CATEGORIES = [
-  "All",
-  "Quantum & ML",
-  "Full Stack",
-  "AI",
-  "EdTech",
-  "Internal Tools",
-];
+export const PROJECT_CATEGORIES = ["All", "Full Stack", "AI", "EdTech", "Internal Tools"];
 
 export const SERVICES = [
   {
     title: "Quantum & Scientific Systems",
-    desc: "Quantum computing simulation, device interaction, and hardware-software R&D.",
+    desc: "Scientific software simulation, device interaction workflows, and quantum computing R&D.",
     icon: "Atom",
   },
   {
@@ -240,7 +224,7 @@ export const SERVICES = [
 export const ACHIEVEMENTS = [
   {
     title: "R&D — Quantum Insight Labs (IIT Delhi)",
-    desc: "Developing quantum computing, QKD, and machine learning systems on physical and simulated devices.",
+    desc: "Professional R&D experience working on quantum computing, QKD, and machine learning systems.",
   },
   {
     title: "Director of Technical Services — Brndfy",
