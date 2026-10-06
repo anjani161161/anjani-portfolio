@@ -772,6 +772,12 @@ export function MarqueeBand() {
 export function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [feedback, setFeedback] = useState<string>("");
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const isMountedRef = useRef(true);
 
@@ -781,16 +787,23 @@ export function Contact() {
     };
   }, []);
 
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+    if (status === "success" || status === "error") {
+      setStatus("idle");
+      setFeedback("");
+    }
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === "sending") return;
 
-    const form = formRef.current || e.currentTarget;
-    const formData = new FormData(form);
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const subject = String(formData.get("subject") || "").trim();
-    const message = String(formData.get("message") || "").trim();
+    const name = formValues.name.trim();
+    const email = formValues.email.trim();
+    const subject = formValues.subject.trim();
+    const message = formValues.message.trim();
 
     if (!name || name.length < 2) {
       toast.error("Please enter your name (at least 2 characters).");
@@ -865,8 +878,14 @@ export function Contact() {
 
       if (res && (res.status === 200 || res.text === "OK")) {
         setStatus("success");
-        setFeedback("Message sent successfully! I'll get back to you soon.");
-        toast.success("Message sent successfully! I'll get back to you soon.");
+        setFeedback("Email sent successfully! I'll get back to you soon.");
+        toast.success("Email sent successfully!");
+        setFormValues({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
         formRef.current?.reset();
       } else {
         throw new Error(res?.text || "Failed to send message.");
@@ -972,16 +991,40 @@ export function Contact() {
           className="rounded-3xl border border-border/60 glass p-8 shadow-soft"
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Name" name="name" placeholder="Your name" required />
-            <Field label="Email" name="email" type="email" placeholder="you@example.com" required />
+            <Field
+              label="Name"
+              name="name"
+              value={formValues.name}
+              onChange={handleInputChange}
+              placeholder="Your name"
+              required
+            />
+            <Field
+              label="Email"
+              name="email"
+              type="email"
+              value={formValues.email}
+              onChange={handleInputChange}
+              placeholder="you@example.com"
+              required
+            />
           </div>
           <div className="mt-4">
-            <Field label="Subject" name="subject" placeholder="What's it about?" required />
+            <Field
+              label="Subject"
+              name="subject"
+              value={formValues.subject}
+              onChange={handleInputChange}
+              placeholder="What's it about?"
+              required
+            />
           </div>
           <div className="mt-4">
             <label className="text-xs font-medium text-muted-foreground">Message</label>
             <textarea
               name="message"
+              value={formValues.message}
+              onChange={handleInputChange}
               required
               minLength={5}
               maxLength={1000}
@@ -998,7 +1041,7 @@ export function Contact() {
               className={cn(
                 "mt-4 flex items-start gap-2.5 rounded-xl border p-3.5 text-xs transition-all",
                 status === "success"
-                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-medium"
                   : "border-destructive/40 bg-destructive/10 text-destructive-foreground",
               )}
             >
@@ -1021,6 +1064,10 @@ export function Contact() {
               <>
                 <Loader2 className="h-4 w-4 animate-spin" /> Sending…
               </>
+            ) : status === "success" ? (
+              <>
+                <CheckCircle2 className="h-4 w-4 text-emerald-300" /> Email Sent!
+              </>
             ) : (
               <>
                 Send Message <Send className="h-4 w-4" />
@@ -1036,12 +1083,16 @@ export function Contact() {
 function Field({
   label,
   name,
+  value,
+  onChange,
   type = "text",
   placeholder,
   required,
 }: {
   label: string;
   name: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   placeholder?: string;
   required?: boolean;
@@ -1052,6 +1103,8 @@ function Field({
       <input
         type={type}
         name={name}
+        value={value}
+        onChange={onChange}
         placeholder={placeholder}
         required={required}
         maxLength={255}
