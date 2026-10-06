@@ -26,7 +26,7 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
-import emailjs from "@emailjs/browser";
+import { sendContactEmail, isEmailConfigured, getEmailConfigStatus } from "@/lib/emailjs";
 import heroImg from "@/assets/hero-visual.jpg";
 import {
   PROFILE,
@@ -821,25 +821,18 @@ export function Contact() {
       return;
     }
 
-    const serviceId = (import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_mv5raln").trim();
-    const templateId = (import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "").trim();
-    const publicKey = (import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "").trim();
-
     const fallbackEmail = PROFILE.targetEmail || PROFILE.email;
 
-    if (!serviceId || !templateId || !publicKey) {
-      console.warn("EmailJS configuration notice: Required credentials not configured.", {
-        hasServiceId: Boolean(serviceId),
-        hasTemplateId: Boolean(templateId),
-        hasPublicKey: Boolean(publicKey),
-      });
+    // Case A — Configuration missing (e.g. Vercel build did not have environment variables injected)
+    if (!isEmailConfigured) {
+      console.warn("EmailJS configuration status:", getEmailConfigStatus());
       if (isMountedRef.current) {
         setStatus("error");
         setFeedback(
           `Email service is not configured yet. Please reach out directly at ${fallbackEmail}.`,
         );
       }
-      toast.error("Email service is temporarily unavailable. Please reach out directly via email.");
+      toast.error("Email service is not configured yet. Please reach out directly via email.");
       return;
     }
 
@@ -849,30 +842,12 @@ export function Contact() {
     }
 
     try {
-      const templateParams = {
+      const res = await sendContactEmail({
         name,
-        from_name: name,
         email,
-        reply_to: email,
         subject: subject || "Portfolio Inquiry",
         message,
-      };
-
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(
-          () =>
-            reject(
-              new Error("Request timed out. Please check your connection or reach out directly."),
-            ),
-          12000,
-        );
       });
-
-      const sendPromise = emailjs.send(serviceId, templateId, templateParams, {
-        publicKey,
-      });
-
-      const res = await Promise.race([sendPromise, timeoutPromise]);
 
       if (!isMountedRef.current) return;
 
@@ -893,12 +868,16 @@ export function Contact() {
     } catch (err: unknown) {
       if (!isMountedRef.current) return;
 
-      console.error("EmailJS submission error:", err);
+      console.error("EmailJS submission failed:", err);
       setStatus("error");
 
-      let errorMessage = "Something went wrong. Please try again or contact me directly.";
+      // Case B — Configuration exists but EmailJS API rejected the request
+      let errorMessage =
+        "Something went wrong while sending your message. Please try again or contact me directly.";
       if (err instanceof Error && err.message) {
-        errorMessage = err.message;
+        if (err.message.includes("timed out")) {
+          errorMessage = "Request timed out. Please check your network or contact me directly.";
+        }
       } else if (typeof err === "string") {
         errorMessage = err;
       } else if (
@@ -998,6 +977,7 @@ export function Contact() {
               onChange={handleInputChange}
               placeholder="Your name"
               required
+              disabled={status === "sending"}
             />
             <Field
               label="Email"
@@ -1007,6 +987,7 @@ export function Contact() {
               onChange={handleInputChange}
               placeholder="you@example.com"
               required
+              disabled={status === "sending"}
             />
           </div>
           <div className="mt-4">
@@ -1017,6 +998,7 @@ export function Contact() {
               onChange={handleInputChange}
               placeholder="What's it about?"
               required
+              disabled={status === "sending"}
             />
           </div>
           <div className="mt-4">
@@ -1026,11 +1008,12 @@ export function Contact() {
               value={formValues.message}
               onChange={handleInputChange}
               required
+              disabled={status === "sending"}
               minLength={5}
               maxLength={1000}
               rows={5}
               placeholder="Tell me about the project, role, or idea…"
-              className="mt-1.5 w-full rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm outline-none transition focus:border-primary/60 focus:bg-background/70"
+              className="mt-1.5 w-full rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm outline-none transition focus:border-primary/60 focus:bg-background/70 disabled:cursor-not-allowed disabled:opacity-60"
             />
           </div>
 
@@ -1041,7 +1024,7 @@ export function Contact() {
               className={cn(
                 "mt-4 flex items-start gap-2.5 rounded-xl border p-3.5 text-xs transition-all",
                 status === "success"
-                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400 font-medium"
+                  ? "border-emerald-500/40 bg-emerald-500/10 font-medium text-emerald-400"
                   : "border-destructive/40 bg-destructive/10 text-destructive-foreground",
               )}
             >
@@ -1057,7 +1040,7 @@ export function Contact() {
           <button
             type="submit"
             disabled={status === "sending"}
-            className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-primary-foreground shadow-elevated transition hover:shadow-glow disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
+            className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-primary-foreground shadow-elevated transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60"
             style={{ background: "var(--gradient-primary)" }}
           >
             {status === "sending" ? (
@@ -1088,6 +1071,7 @@ function Field({
   type = "text",
   placeholder,
   required,
+  disabled,
 }: {
   label: string;
   name: string;
@@ -1096,6 +1080,7 @@ function Field({
   type?: string;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <label className="block">
@@ -1107,8 +1092,9 @@ function Field({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
+        disabled={disabled}
         maxLength={255}
-        className="mt-1.5 w-full rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm outline-none transition focus:border-primary/60 focus:bg-background/70"
+        className="mt-1.5 w-full rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm outline-none transition focus:border-primary/60 focus:bg-background/70 disabled:cursor-not-allowed disabled:opacity-60"
       />
     </label>
   );
