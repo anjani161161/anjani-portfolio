@@ -25,17 +25,20 @@ import { LoadingScreen, ScrollProgress } from "@/components/portfolio/fx";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Anjani Singh — Full Stack Developer, AI & Design" },
+      { title: "Anjani Singh — Software Engineer, Quantum Tech & Machine Learning" },
       {
         name: "description",
         content:
-          "Portfolio of Anjani Singh — Full Stack Developer, AI Enthusiast, Graphic Designer, and Director of Technical Services at Brndfy.",
+          "Portfolio of Anjani Singh — Software Engineer, Quantum & Machine Learning Developer (R&D at Quantum Insight Labs, IIT Delhi), and Full Stack Builder.",
       },
-      { property: "og:title", content: "Anjani Singh — Full Stack Developer & Designer" },
+      {
+        property: "og:title",
+        content: "Anjani Singh — Software Engineer, Quantum Tech & Machine Learning",
+      },
       {
         property: "og:description",
         content:
-          "Premium portfolio showcasing projects, services, and experience across web, AI, and design.",
+          "Portfolio showcasing engineering and research projects across quantum technology, machine learning, and scalable web software.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

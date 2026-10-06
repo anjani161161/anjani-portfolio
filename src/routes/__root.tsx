@@ -76,7 +76,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Personal portfolio of Anjani Singh — Full Stack Developer, AI Enthusiast, Designer.",
+          "Personal portfolio of Anjani Singh — Software Engineer, Quantum Tech & Machine Learning Developer.",
       },
       { name: "author", content: "Anjani Singh" },
     ],

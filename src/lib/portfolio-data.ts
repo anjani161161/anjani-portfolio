@@ -7,8 +7,8 @@ import project5 from "@/assets/project-5.jpg";
 export const PROFILE = {
   name: "Anjani Singh",
   shortName: "Anjani",
-  tagline: "Full Stack Developer · AI Enthusiast · Designer · Tech Leader",
-  bio: "Computer Science student passionate about building modern web applications, intuitive user experiences, and AI-powered solutions. I enjoy turning ideas into scalable products using clean code, thoughtful design, and the latest technologies.",
+  tagline: "Software Engineer · Quantum & Machine Learning Developer · R&D",
+  bio: "Computer Science engineer working across software development, quantum technology, and machine learning. Experienced in building scalable web applications, quantum computing & communication systems, and research-driven intelligent solutions.",
 
   email: "hello@anjanisingh.dev",
   socials: {
@@ -18,7 +18,8 @@ export const PROFILE = {
     instagram: "https://www.instagram.com/1616anjani_singh/",
   },
   resumeUrl: "https://drive.google.com/file/d/1TdCY4X8OymbwHHuivcUHFek-ybPyuILO/view?usp=sharing",
-  resumeDownloadUrl: "https://drive.google.com/uc?export=download&id=1TdCY4X8OymbwHHuivcUHFek-ybPyuILO",
+  resumeDownloadUrl:
+    "https://drive.google.com/uc?export=download&id=1TdCY4X8OymbwHHuivcUHFek-ybPyuILO",
 } as const;
 
 export const NAV_LINKS = [
@@ -32,36 +33,75 @@ export const NAV_LINKS = [
 ];
 
 export const STATS = [
-  { value: "5+", label: "Projects" },
-  { value: "10+", label: "Technologies" },
-
+  { value: "7+", label: "Projects" },
+  { value: "12+", label: "Technologies" },
   { value: "10+", label: "Certifications" },
   { value: "3", label: "Leadership Roles" },
 ];
 
 export const SKILL_GROUPS = [
   {
+    title: "Quantum & R&D",
+    skills: [
+      "Quantum Computing",
+      "QForge 24",
+      "Quantum Key Distribution (QKD)",
+      "Device Integration",
+      "Hardware-Software Systems",
+      "Scientific Simulation",
+    ],
+  },
+  {
+    title: "AI & Machine Learning",
+    skills: [
+      "Machine Learning",
+      "Model Development",
+      "Data Processing",
+      "OpenAI APIs",
+      "Prompt Engineering",
+      "AI Integrations",
+    ],
+  },
+  {
     title: "Frontend",
     skills: ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS", "Next.js"],
   },
   { title: "Backend", skills: ["Node.js", "Express.js", "REST APIs"] },
   { title: "Database", skills: ["MongoDB", "MySQL"] },
-  { title: "Programming", skills: ["Java", "Python", "TypeScript"] },
+  { title: "Programming", skills: ["Python", "Java", "TypeScript", "C/C++"] },
   {
-    title: "Tools",
-    skills: ["Git", "GitHub", "VS Code", "Figma", "Postman"],
+    title: "Tools & Systems",
+    skills: ["Git", "GitHub", "VS Code", "Figma", "Postman", "Linux"],
   },
   {
     title: "Design",
     skills: ["Adobe Photoshop", "Adobe Illustrator", "Canva"],
   },
-  {
-    title: "AI",
-    skills: ["OpenAI APIs", "Prompt Engineering", "AI Integrations"],
-  },
 ];
 
-export const EXPERIENCES = [
+export interface ExperienceItem {
+  role: string;
+  company: string;
+  period: string;
+  current?: boolean;
+  points: string[];
+}
+
+export const EXPERIENCES: ExperienceItem[] = [
+  {
+    role: "Quantum / Machine Learning Project Developer (R&D)",
+    company: "Quantum Insight Labs Pvt. Ltd. — IIT Delhi",
+    period: "2026 — Present",
+    current: true,
+    points: [
+      "Currently working on quantum technology and machine learning projects at Quantum Insight Labs in collaboration with IIT Delhi.",
+      "Developing, testing, and integrating quantum computing, quantum communication, simulation, and machine learning systems, with hands-on work across both software and physical quantum devices.",
+      "Hands-on work on the QForge 24 project involving quantum computing and quantum hardware experimentation.",
+      "Contributing to the Infinity project spanning quantum technology experimentation, scientific software, and device interaction.",
+      "Working on Quantum Key Distribution (QKD) projects focused on quantum communication and secure key exchange.",
+      "Conducting machine learning experimentation, model development, data processing, and hardware-software integration.",
+    ],
+  },
   {
     role: "Director of Technical Services",
     company: "Brndfy",
@@ -72,7 +112,6 @@ export const EXPERIENCES = [
       "Managing project architecture, deployment workflows, and development standards while collaborating with design and development teams.",
     ],
   },
-
   {
     role: "B.Tech — Computer Science Engineering",
     company: "Galgotias College of Engineering and Technology",
@@ -86,10 +125,30 @@ export const EXPERIENCES = [
 
 export const PROJECTS = [
   {
+    title: "Quantum Hardware & Device Simulation (QForge 24 & Infinity)",
+    description:
+      "Hands-on quantum hardware experimentation with the QForge 24 device, scientific simulation software, and physical device interaction workflows.",
+    image: project5,
+    tags: ["Quantum Computing", "QForge 24", "Infinity", "Device Integration", "Simulation"],
+    category: "Quantum & ML",
+    demo: "",
+    github: "",
+  },
+  {
+    title: "QKD & Machine Learning Research Systems",
+    description:
+      "Quantum Key Distribution systems focused on quantum communication and secure key exchange, combined with machine learning pipelines for experimental data processing.",
+    image: project1,
+    tags: ["QKD", "Quantum Communication", "Machine Learning", "Python", "R&D"],
+    category: "Quantum & ML",
+    demo: "",
+    github: "",
+  },
+  {
     title: "AI Powered SaaS Dashboard",
     description:
       "Production SaaS interface with realtime analytics, role-based access, and LLM-powered insights.",
-    image: project1,
+    image: project2,
     tags: ["Next.js", "OpenAI", "PostgreSQL", "Tailwind"],
     category: "Full Stack",
     demo: "",
@@ -99,7 +158,7 @@ export const PROJECTS = [
     title: "Online Examination & Result System",
     description:
       "Secure exam delivery with auto-grading, proctoring hooks, and instant result dashboards.",
-    image: project2,
+    image: project3,
     tags: ["React", "Node.js", "MongoDB", "JWT"],
     category: "Full Stack",
     demo: "",
@@ -109,7 +168,7 @@ export const PROJECTS = [
     title: "Placement Preparation Platform",
     description:
       "Curated DSA tracks, mock interviews, and progress analytics for engineering students.",
-    image: project3,
+    image: project4,
     tags: ["Next.js", "Prisma", "MySQL"],
     category: "EdTech",
     demo: "",
@@ -118,8 +177,7 @@ export const PROJECTS = [
   {
     title: "Marketing Agency Dashboard",
     description: "Internal command center for Brndfy — clients, campaigns, invoicing, and reports.",
-
-    image: project4,
+    image: project1,
     tags: ["React", "Express", "Recharts"],
     category: "Internal Tools",
     demo: "",
@@ -137,9 +195,26 @@ export const PROJECTS = [
   },
 ];
 
-export const PROJECT_CATEGORIES = ["All", "Full Stack", "AI", "EdTech", "Internal Tools"];
+export const PROJECT_CATEGORIES = [
+  "All",
+  "Quantum & ML",
+  "Full Stack",
+  "AI",
+  "EdTech",
+  "Internal Tools",
+];
 
 export const SERVICES = [
+  {
+    title: "Quantum & Scientific Systems",
+    desc: "Quantum computing simulation, device interaction, and hardware-software R&D.",
+    icon: "Atom",
+  },
+  {
+    title: "Machine Learning Solutions",
+    desc: "Model development, data processing pipelines, and applied intelligent systems.",
+    icon: "Sparkles",
+  },
   {
     title: "Full Stack Web Development",
     desc: "Production-grade web apps with modern React/Next.js stacks and reliable backends.",
@@ -156,38 +231,27 @@ export const SERVICES = [
     icon: "Palette",
   },
   {
-    title: "AI Integration",
-    desc: "Embed LLMs, vector search, and automation into your existing product.",
-    icon: "Sparkles",
-  },
-  {
-    title: "Website Optimization",
-    desc: "Performance, SEO, accessibility, and conversion tuning for shipped sites.",
+    title: "Website & Systems Optimization",
+    desc: "Performance tuning, architecture reviews, and engineering process design.",
     icon: "Gauge",
-  },
-  {
-    title: "Technical Consulting",
-    desc: "Architecture reviews, hiring support, and engineering process design.",
-    icon: "Compass",
   },
 ];
 
 export const ACHIEVEMENTS = [
   {
-    title: "Director — Brndfy",
+    title: "R&D — Quantum Insight Labs (IIT Delhi)",
+    desc: "Developing quantum computing, QKD, and machine learning systems on physical and simulated devices.",
+  },
+  {
+    title: "Director of Technical Services — Brndfy",
     desc: "Leading the technical services division of a fast-growing marketing agency.",
   },
-
   {
     title: "Top Performer — College Hackathons",
     desc: "Multiple finalist placements across inter-college coding competitions.",
   },
   {
-    title: "Open Source Contributor",
-    desc: "Active contributor to community libraries and developer tools.",
-  },
-  {
-    title: "Mentor & Speaker",
-    desc: "Mentor juniors on web, design, and AI tooling at campus tech events.",
+    title: "Open Source Contributor & Mentor",
+    desc: "Active contributor to community libraries and mentoring peers on software engineering and tooling.",
   },
 ];

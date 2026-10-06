@@ -21,7 +21,12 @@ import {
   MapPin,
   Code,
   Trophy,
+  Atom,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
+import emailjs from "@emailjs/browser";
 import heroImg from "@/assets/hero-visual.jpg";
 import {
   PROFILE,
@@ -92,11 +97,11 @@ const item = {
 
 /* ---------------- Hero ---------------- */
 const ROLES = [
-  "Full Stack Developer",
-  "Frontend Developer",
-  "UI/UX Designer",
-  "AI Enthusiast",
-  "Computer Science Student",
+  "Quantum & ML Developer",
+  "Full Stack Software Engineer",
+  "Quantum Computing R&D",
+  "Machine Learning Developer",
+  "UI/UX & Systems Builder",
 ];
 
 function useTyping(words: string[], speed = 70, pause = 1400) {
@@ -301,7 +306,7 @@ export function Hero() {
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Building with
               </div>
-              <div className="text-sm font-medium">React · Next · AI</div>
+              <div className="text-sm font-medium">Software · Quantum · ML</div>
             </motion.div>
           </motion.div>
         </div>
@@ -339,7 +344,7 @@ export function About() {
           A builder who cares about <span className="text-gradient">craft</span>.
         </>
       }
-      sub="I'm an engineering student building real products. I love the intersection of clean systems, sharp interfaces, and pragmatic AI."
+      sub="Engineering scalable software, exploring quantum technology, and researching machine learning systems."
     >
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <motion.div
@@ -350,13 +355,11 @@ export function About() {
           className="rounded-3xl border border-border/60 glass p-8 shadow-soft"
         >
           <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-            I am a Computer Science Engineering student who enjoys solving real-world problems
-            through technology. My journey has been driven by curiosity, continuous learning, and
-            building practical projects that improve my skills in web development, design, and AI. I
-            focus on creating responsive, user-friendly applications while constantly exploring
-            modern frameworks, development practices, and emerging technologies. My goal is to grow
-            as a software engineer by building impactful digital products and contributing to
-            meaningful projects.
+            I am a Computer Science engineer passionate about building impactful software, advancing
+            quantum technology, and developing machine learning solutions. My work spans full-stack
+            engineering, quantum computing, quantum key distribution (QKD), and scientific
+            simulation in collaboration with IIT Delhi. I focus on bridging theoretical science and
+            physical devices with reliable, modern software systems.
           </p>
 
           <div className="mt-8 flex items-start gap-4 rounded-2xl border border-border/60 bg-card/40 p-4">
@@ -480,21 +483,43 @@ export function Experience() {
             >
               <span className="absolute left-4 top-3 z-10 grid h-3 w-3 -translate-x-1/2 place-items-center md:left-1/2">
                 <span
-                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                  style={{ background: "var(--glow)" }}
+                  className={cn(
+                    "absolute inline-flex h-full w-full animate-ping rounded-full opacity-60",
+                    exp.current ? "bg-emerald-400" : "",
+                  )}
+                  style={{ background: exp.current ? undefined : "var(--glow)" }}
                 />
                 <span
-                  className="relative h-3 w-3 rounded-full"
-                  style={{ background: "var(--gradient-primary)" }}
+                  className={cn(
+                    "relative h-3 w-3 rounded-full",
+                    exp.current ? "bg-emerald-500 shadow-glow" : "",
+                  )}
+                  style={{ background: exp.current ? undefined : "var(--gradient-primary)" }}
                 />
               </span>
-              <div className="pl-10 md:pl-0 md:pr-10">
-                <div className="rounded-2xl border border-border/60 glass p-6 shadow-soft">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Briefcase className="h-3.5 w-3.5" /> {exp.period}
+              <div className={cn("pl-10", i % 2 === 0 ? "md:pl-0 md:pr-10" : "md:pl-10 md:pr-0")}>
+                <div
+                  className={cn(
+                    "rounded-2xl border border-border/60 glass p-6 shadow-soft transition hover:shadow-elevated",
+                    exp.current ? "border-emerald-500/35 ring-1 ring-emerald-500/20" : "",
+                  )}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5 font-medium">
+                      <Briefcase className="h-3.5 w-3.5" /> {exp.period}
+                    </span>
+                    {exp.current && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-400">
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        </span>
+                        Present / Current
+                      </span>
+                    )}
                   </div>
                   <div className="mt-2 font-display text-lg font-semibold">{exp.role}</div>
-                  <div className="text-sm text-primary">{exp.company}</div>
+                  <div className="text-sm font-medium text-primary">{exp.company}</div>
                   <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                     {exp.points.map((p) => (
                       <li key={p} className="flex gap-2">
@@ -623,7 +648,7 @@ export function Projects() {
 }
 
 /* ---------------- Services + Achievements ---------------- */
-const ICONS = { Code2, Layers, Palette, Sparkles, Gauge, Compass } as const;
+const ICONS = { Code2, Layers, Palette, Sparkles, Gauge, Compass, Atom } as const;
 
 export function Services() {
   return (
@@ -701,16 +726,18 @@ export function Services() {
 /* ---------------- Marquee Band ---------------- */
 export function MarqueeBand() {
   const items = [
+    "Quantum Tech",
+    "Machine Learning",
+    "QKD",
     "React",
     "Next.js",
     "TypeScript",
+    "Python",
     "Node.js",
     "Tailwind",
     "MongoDB",
-    "Python",
     "Figma",
     "OpenAI",
-    "Vercel",
   ];
   return (
     <div className="py-14 border-y border-border/40 bg-background/40 backdrop-blur-sm">
@@ -721,16 +748,75 @@ export function MarqueeBand() {
 
 /* ---------------- Contact + Footer ---------------- */
 export function Contact() {
-  const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [feedback, setFeedback] = useState<string>("");
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      toast.success("Thanks! I'll get back to you within 24 hours.");
-      (e.target as HTMLFormElement).reset();
-    }, 700);
+    if (status === "sending") return;
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const subject = String(formData.get("subject") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    if (!name || !email || !message) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    setStatus("sending");
+    setFeedback("");
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_mv5raln";
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!templateId || !publicKey) {
+      console.warn(
+        "EmailJS configuration notice: VITE_EMAILJS_TEMPLATE_ID or VITE_EMAILJS_PUBLIC_KEY is not defined in environment.",
+      );
+      setStatus("error");
+      const notice =
+        "Email configuration is pending Template ID / Public Key. Please contact me directly at " +
+        PROFILE.email;
+      setFeedback(notice);
+      toast.error("Something went wrong. Please try again or contact me directly.");
+      return;
+    }
+
+    try {
+      const res = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name,
+          from_name: name,
+          email,
+          reply_to: email,
+          subject: subject || "Portfolio Inquiry",
+          message,
+        },
+        publicKey,
+      );
+
+      if (res.status === 200 || res.text === "OK") {
+        setStatus("success");
+        setFeedback("Message sent successfully! I'll get back to you soon.");
+        toast.success("Message sent successfully! I'll get back to you soon.");
+        form.reset();
+      } else {
+        throw new Error(res.text || "Failed to send");
+      }
+    } catch (err: unknown) {
+      console.error("EmailJS submission error:", err);
+      setStatus("error");
+      const errText = "Something went wrong. Please try again or contact me directly.";
+      setFeedback(errText);
+      toast.error(errText);
+    }
   }
 
   return (
@@ -742,7 +828,7 @@ export function Contact() {
           Have an idea? <span className="text-gradient">Let's build it.</span>
         </>
       }
-      sub="Open to internships, full-time placements, and freelance work."
+      sub="Open to internships, research collaborations, full-time roles, and freelance work."
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <motion.div
@@ -822,14 +908,37 @@ export function Contact() {
               className="mt-1.5 w-full rounded-xl border border-border/70 bg-background/40 px-4 py-3 text-sm outline-none transition focus:border-primary/60 focus:bg-background/70"
             />
           </div>
+
+          {feedback && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={cn(
+                "mt-4 flex items-start gap-2.5 rounded-xl border p-3.5 text-xs transition-all",
+                status === "success"
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
+                  : "border-destructive/40 bg-destructive/10 text-destructive-foreground",
+              )}
+            >
+              {status === "success" ? (
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+              ) : (
+                <AlertCircle className="h-4 w-4 shrink-0 text-destructive" />
+              )}
+              <span className="leading-relaxed">{feedback}</span>
+            </motion.div>
+          )}
+
           <button
             type="submit"
-            disabled={sending}
-            className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-primary-foreground shadow-elevated transition hover:shadow-glow disabled:opacity-60"
+            disabled={status === "sending"}
+            className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-primary-foreground shadow-elevated transition hover:shadow-glow disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
             style={{ background: "var(--gradient-primary)" }}
           >
-            {sending ? (
-              "Sending…"
+            {status === "sending" ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" /> Sending…
+              </>
             ) : (
               <>
                 Send Message <Send className="h-4 w-4" />
