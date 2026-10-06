@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { motion } from "motion/react";
 import {
@@ -772,72 +772,131 @@ export function MarqueeBand() {
 export function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [feedback, setFeedback] = useState<string>("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === "sending") return;
 
-    const form = e.currentTarget;
+    const form = formRef.current || e.currentTarget;
     const formData = new FormData(form);
     const name = String(formData.get("name") || "").trim();
     const email = String(formData.get("email") || "").trim();
     const subject = String(formData.get("subject") || "").trim();
     const message = String(formData.get("message") || "").trim();
 
-    if (!name || !email || !message) {
-      toast.error("Please fill in all required fields.");
+    if (!name || name.length < 2) {
+      toast.error("Please enter your name (at least 2 characters).");
       return;
     }
 
-    setStatus("sending");
-    setFeedback("");
-
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_mv5raln";
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_hr40enk";
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "ej3M2sDVB0-DGVDEX";
-
-    if (!templateId || !publicKey) {
-      console.warn(
-        "EmailJS configuration notice: VITE_EMAILJS_TEMPLATE_ID or VITE_EMAILJS_PUBLIC_KEY is not defined in environment.",
-      );
-      setStatus("error");
-      const notice =
-        "Email configuration is pending Template ID / Public Key. Please contact me directly at " +
-        PROFILE.email;
-      setFeedback(notice);
-      toast.error("Something went wrong. Please try again or contact me directly.");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
       return;
+    }
+
+    if (!message || message.length < 5) {
+      toast.error("Please enter a message (at least 5 characters).");
+      return;
+    }
+
+    const serviceId = (import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_mv5raln").trim();
+    const templateId = (import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "").trim();
+    const publicKey = (import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "").trim();
+
+    const fallbackEmail = PROFILE.targetEmail || PROFILE.email;
+
+    if (!serviceId || !templateId || !publicKey) {
+      console.warn("EmailJS configuration notice: Required credentials not configured.", {
+        hasServiceId: Boolean(serviceId),
+        hasTemplateId: Boolean(templateId),
+        hasPublicKey: Boolean(publicKey),
+      });
+      if (isMountedRef.current) {
+        setStatus("error");
+        setFeedback(
+          `Email service is not configured yet. Please reach out directly at ${fallbackEmail}.`,
+        );
+      }
+      toast.error("Email service is temporarily unavailable. Please reach out directly via email.");
+      return;
+    }
+
+    if (isMountedRef.current) {
+      setStatus("sending");
+      setFeedback("");
     }
 
     try {
-      const res = await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          name,
-          from_name: name,
-          email,
-          reply_to: email,
-          subject: subject || "Portfolio Inquiry",
-          message,
-        },
-        publicKey,
-      );
+      const templateParams = {
+        name,
+        from_name: name,
+        email,
+        reply_to: email,
+        subject: subject || "Portfolio Inquiry",
+        message,
+      };
 
-      if (res.status === 200 || res.text === "OK") {
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(
+          () =>
+            reject(
+              new Error("Request timed out. Please check your connection or reach out directly."),
+            ),
+          12000,
+        );
+      });
+
+      const sendPromise = emailjs.send(serviceId, templateId, templateParams, {
+        publicKey,
+      });
+
+      const res = await Promise.race([sendPromise, timeoutPromise]);
+
+      if (!isMountedRef.current) return;
+
+      if (res && (res.status === 200 || res.text === "OK")) {
         setStatus("success");
         setFeedback("Message sent successfully! I'll get back to you soon.");
         toast.success("Message sent successfully! I'll get back to you soon.");
-        form.reset();
+        formRef.current?.reset();
       } else {
-        throw new Error(res.text || "Failed to send");
+        throw new Error(res?.text || "Failed to send message.");
       }
     } catch (err: unknown) {
+      if (!isMountedRef.current) return;
+
       console.error("EmailJS submission error:", err);
       setStatus("error");
-      const errText = "Something went wrong. Please try again or contact me directly.";
-      setFeedback(errText);
-      toast.error(errText);
+
+      let errorMessage = "Something went wrong. Please try again or contact me directly.";
+      if (err instanceof Error && err.message) {
+        errorMessage = err.message;
+      } else if (typeof err === "string") {
+        errorMessage = err;
+      } else if (
+        err &&
+        typeof err === "object" &&
+        "text" in err &&
+        typeof (err as { text: unknown }).text === "string"
+      ) {
+        errorMessage = (err as { text: string }).text;
+      }
+
+      setFeedback(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      if (isMountedRef.current) {
+        setStatus((prev) => (prev === "sending" ? "idle" : prev));
+      }
     }
   }
 
@@ -905,6 +964,7 @@ export function Contact() {
         </motion.div>
 
         <motion.form
+          ref={formRef}
           onSubmit={onSubmit}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -923,7 +983,7 @@ export function Contact() {
             <textarea
               name="message"
               required
-              minLength={10}
+              minLength={5}
               maxLength={1000}
               rows={5}
               placeholder="Tell me about the project, role, or idea…"
