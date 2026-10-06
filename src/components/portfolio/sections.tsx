@@ -793,8 +793,8 @@ export function Contact() {
     setFeedback("");
 
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_mv5raln";
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_hr40enk";
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "ej3M2sDVB0-DGVDEX";
 
     if (!templateId || !publicKey) {
       console.warn(
