@@ -861,7 +861,7 @@ export function Contact() {
         >
           <div className="text-sm text-muted-foreground">Reach me directly</div>
           <a
-            href={`mailto:${PROFILE.email}`}
+            href={`mailto:${PROFILE.targetEmail || PROFILE.email}`}
             className="mt-1 block font-display text-xl font-semibold md:text-2xl"
           >
             {PROFILE.email}
@@ -1041,7 +1041,7 @@ export function Footer() {
           <ul className="space-y-2 text-sm">
             <li>
               <a
-                href={`mailto:${PROFILE.email}`}
+                href={`mailto:${PROFILE.targetEmail || PROFILE.email}`}
                 className="text-muted-foreground transition hover:text-foreground"
               >
                 Email

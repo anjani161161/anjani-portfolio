@@ -287,7 +287,7 @@ export function PortfolioCommandPalette({
         <CommandGroup heading="Actions">
           <CommandItem
             onSelect={() => {
-              window.location.href = `mailto:${PROFILE.email}`;
+              window.location.href = `mailto:${PROFILE.targetEmail || PROFILE.email}`;
             }}
           >
             Email Anjani

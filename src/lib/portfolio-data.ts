@@ -11,6 +11,7 @@ export const PROFILE = {
   bio: "Computer Science engineer working across software development, quantum technology, and machine learning. Experienced in building scalable web applications, quantum computing & communication systems, and research-driven intelligent solutions.",
 
   email: "hello@anjanisingh.dev",
+  targetEmail: "anjanisingh161161@gmail.com",
   socials: {
     github: "https://github.com/anjani161161",
     linkedin: "https://www.linkedin.com/in/anjani-singh1616/",
