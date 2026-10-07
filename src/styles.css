@@ -408,3 +408,26 @@
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
+
+/* ---------------- Projects Continuous Marquee ---------------- */
+@keyframes project-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.project-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.25rem;
+  animation: project-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+.project-marquee-container:hover .project-marquee-track,
+.project-marquee-container:focus-within .project-marquee-track {
+  animation-play-state: paused;
+}

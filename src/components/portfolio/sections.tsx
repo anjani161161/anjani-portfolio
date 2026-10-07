@@ -25,6 +25,7 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
+  ArrowUpRight,
 } from "lucide-react";
 import { sendContactEmail, isEmailConfigured, getEmailConfigStatus } from "@/lib/emailjs";
 import heroImg from "@/assets/hero-visual.jpg";
@@ -97,9 +98,9 @@ const item = {
 
 /* ---------------- Hero ---------------- */
 const ROLES = [
+  "Quantum & Machine Learning R&D",
   "Quantum & ML Developer",
   "Full Stack Software Engineer",
-  "Quantum Computing R&D",
   "Machine Learning Developer",
   "UI/UX & Systems Builder",
 ];
@@ -169,7 +170,7 @@ export function Hero() {
               variants={item}
               className="mt-5 flex items-center gap-2 font-mono text-lg text-muted-foreground md:text-2xl"
             >
-              <span className="text-foreground/80">I am</span>
+              <span className="text-primary font-semibold">&gt;</span>
               <span className="text-gradient-primary font-semibold">{typed}</span>
               <span className="cursor-blink text-primary">|</span>
             </motion.div>
@@ -562,10 +563,22 @@ export function Experience() {
 /* ---------------- Projects ---------------- */
 export function Projects() {
   const [filter, setFilter] = useState("All");
-  const filtered = useMemo(
-    () => (filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter)),
-    [filter],
-  );
+
+  const filtered = useMemo(() => {
+    if (filter === "All") return PROJECTS;
+    return PROJECTS.filter((p) => p.category.toLowerCase().includes(filter.toLowerCase()));
+  }, [filter]);
+
+  // Ensure enough items so that one half is wider than any display (at least 8 items per half),
+  // then duplicate to form two identical halves for a mathematically seamless 0% -> -50% translateX marquee loop.
+  const marqueeItems = useMemo(() => {
+    const base = filtered.length > 0 ? filtered : PROJECTS;
+    let items = [...base];
+    while (items.length < 8) {
+      items = [...items, ...base];
+    }
+    return [...items, ...items];
+  }, [filtered]);
 
   return (
     <Section
@@ -576,95 +589,108 @@ export function Projects() {
           Projects I'm <span className="text-gradient">proud</span> of.
         </>
       }
-      sub="A snapshot of what I've shipped — across web, AI, and internal tooling."
+      sub="A continuous showcase of software, AI systems, and tools I've built."
     >
-      <div className="mb-8 flex flex-wrap gap-2">
-        {PROJECT_CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={cn(
-              "rounded-full border px-4 py-1.5 text-xs font-medium transition",
-              filter === cat
-                ? "border-transparent text-primary-foreground shadow-soft"
-                : "border-border/60 glass text-muted-foreground hover:text-foreground",
-            )}
-            style={filter === cat ? { background: "var(--gradient-primary)" } : undefined}
-          >
-            {cat}
-          </button>
-        ))}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">
+          {PROJECT_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={cn(
+                "rounded-full border px-4 py-1.5 text-xs font-medium transition cursor-pointer",
+                filter === cat
+                  ? "border-transparent text-primary-foreground shadow-soft"
+                  : "border-border/60 glass text-muted-foreground hover:text-foreground",
+              )}
+              style={filter === cat ? { background: "var(--gradient-primary)" } : undefined}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        <div className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Github className="h-3.5 w-3.5 text-primary" />
+          <span>Click any card to explore code on GitHub</span>
+        </div>
       </div>
 
-      <motion.div layout className="grid gap-6 md:grid-cols-2">
-        {filtered.map((p, i) => (
-          <motion.div
-            key={p.title}
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: (i % 4) * 0.05 }}
-          >
-            <Tilt
-              intensity={6}
-              className="group h-full overflow-hidden rounded-3xl border border-border/60 glass shadow-soft transition hover:shadow-elevated"
+      <div className="project-marquee-container relative -mx-4 overflow-hidden px-4 py-2 sm:-mx-6 sm:px-6 [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
+        <div className="project-marquee-track py-2">
+          {marqueeItems.map((p, idx) => (
+            <a
+              key={`${p.title}-${idx}`}
+              href={p.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View ${p.title} repository on GitHub`}
+              className="group relative block w-[285px] sm:w-[315px] md:w-[335px] shrink-0 select-none overflow-hidden rounded-2xl border border-border/60 glass shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-t-3xl">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted/40">
                 <img
                   src={p.image}
                   alt={p.title}
                   loading="lazy"
-                  width={1024}
-                  height={640}
+                  width={640}
+                  height={360}
                   className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent" />
-                <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/40 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur">
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/25 to-transparent" />
+                <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/60 px-2.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
                   {p.category}
                 </span>
+                <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-white/20 bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Github className="h-3 w-3" />
+                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
               </div>
-              <div className="p-6">
-                <h3 className="font-display text-lg font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.description}</p>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {p.tags.map((t) => (
+
+              <div className="p-4 sm:p-4.5">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="truncate font-display text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                    {p.title}
+                  </h3>
+                </div>
+
+                <p className="mt-1.5 h-[2rem] text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                  {p.description}
+                </p>
+
+                <div className="mt-3 flex flex-wrap gap-1">
+                  {p.tags.slice(0, 3).map((t) => (
                     <span
                       key={t}
-                      className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                      className="rounded-md bg-muted/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
                     >
                       {t}
                     </span>
                   ))}
+                  {p.tags.length > 3 && (
+                    <span className="rounded-md bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/75">
+                      +{p.tags.length - 3}
+                    </span>
+                  )}
                 </div>
-                <div className="mt-5 flex gap-2">
-                  {p.demo ? (
-                    <a
-                      href={p.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-primary-foreground transition hover:opacity-90"
-                      style={{ background: "var(--gradient-primary)" }}
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" /> Live
-                    </a>
-                  ) : null}
-                  {p.github ? (
-                    <a
-                      href={p.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-3 py-1.5 text-xs font-medium transition hover:bg-accent"
-                    >
-                      <Github className="h-3.5 w-3.5" /> Code
-                    </a>
-                  ) : null}
+
+                <div className="mt-3 flex items-center justify-between border-t border-border/40 pt-2.5 text-xs font-medium text-primary">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground transition-colors group-hover:text-primary">
+                    <Github className="h-3 w-3 text-primary" /> View Repository
+                  </span>
+                  <span className="inline-flex items-center gap-0.5 text-[11px] text-primary">
+                    Code{" "}
+                    <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
                 </div>
               </div>
-            </Tilt>
-          </motion.div>
-        ))}
-      </motion.div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
+        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+        <span>Hover or focus card to pause scroll · Smooth infinite loop</span>
+      </div>
     </Section>
   );
 }

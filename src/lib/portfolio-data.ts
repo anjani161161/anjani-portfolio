@@ -137,62 +137,46 @@ export const EXPERIENCES: ExperienceItem[] = [
 
 export const PROJECTS = [
   {
-    title: "AI Powered SaaS Dashboard",
-    description:
-      "Production SaaS interface with realtime analytics, role-based access, and LLM-powered insights.",
-    image: project1,
-    tags: ["Next.js", "OpenAI", "PostgreSQL", "Tailwind"],
-    category: "Full Stack",
-    demo: "",
-    github: "",
-  },
-  {
-    title: "Online Examination & Result System",
-    description:
-      "Secure exam delivery with auto-grading, proctoring hooks, and instant result dashboards.",
+    title: "ExamPro",
+    description: "Online Examination and Result Management System.",
+    category: "Web Development / Full Stack",
+    github: "https://github.com/anjani161161/ExamPro",
     image: project2,
-    tags: ["React", "Node.js", "MongoDB", "JWT"],
-    category: "Full Stack",
-    demo: "",
-    github: "",
+    tags: ["React", "Node.js", "MongoDB", "Express", "JWT"],
   },
   {
-    title: "Placement Preparation Platform",
+    title: "AI-Powered SaaS Dashboard",
     description:
-      "Curated DSA tracks, mock interviews, and progress analytics for engineering students.",
-    image: project3,
-    tags: ["Next.js", "Prisma", "MySQL"],
-    category: "EdTech",
-    demo: "",
-    github: "",
+      "AI-powered SaaS dashboard for intelligent analytics, productivity, and platform management.",
+    category: "AI / SaaS / Full Stack",
+    github: "https://github.com/anjani161161/AI-Powered-SaaS-Dashboard",
+    image: project1,
+    tags: ["Next.js", "AI Analytics", "Tailwind", "PostgreSQL"],
   },
   {
-    title: "Marketing Agency Dashboard",
-    description: "Internal command center for Brndfy — clients, campaigns, invoicing, and reports.",
-    image: project4,
-    tags: ["React", "Express", "Recharts"],
-    category: "Internal Tools",
-    demo: "",
-    github: "",
-  },
-  {
-    title: "AI Productivity Suite",
-    description:
-      "A bundle of AI tools — writer, summarizer, image enhancer — with unified prompt orchestration.",
+    title: "AI Agent",
+    description: "AI agent system focused on intelligent task execution and AI-assisted workflows.",
+    category: "AI / Machine Learning",
+    github: "https://github.com/anjani161161/ai_agent",
     image: project5,
-    tags: ["Next.js", "OpenAI", "Vercel AI SDK"],
-    category: "AI",
-    demo: "",
-    github: "",
+    tags: ["Python", "AI Agent", "LLM Workflows", "Automation"],
+  },
+  {
+    title: "Atmos Watch",
+    description: "Atmospheric monitoring and environmental intelligence project.",
+    category: "AI / Environment / Data",
+    github: "https://github.com/anjani161161/atmos_watch",
+    image: project4,
+    tags: ["Data Intelligence", "Environmental AI", "Monitoring", "Python"],
   },
 ];
 
-export const PROJECT_CATEGORIES = ["All", "Full Stack", "AI", "EdTech", "Internal Tools"];
+export const PROJECT_CATEGORIES = ["All", "Full Stack", "AI", "Machine Learning"];
 
 export const SERVICES = [
   {
     title: "Quantum & Scientific Systems",
-    desc: "Scientific software simulation, device interaction workflows, and quantum computing R&D.",
+    desc: "Scientific software simulation, device interaction workflows, and quantum & machine learning R&D.",
     icon: "Atom",
   },
   {
