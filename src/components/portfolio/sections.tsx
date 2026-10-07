@@ -526,23 +526,26 @@ export function Experience() {
                       {exp.description}
                     </p>
                   )}
-                  <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                    {exp.points.map((p) => (
-                      <li key={p} className="flex gap-2">
-                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-foreground/40" /> {p}
-                      </li>
-                    ))}
-                  </ul>
+                  {exp.points && exp.points.length > 0 && (
+                    <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                      {exp.points.map((p) => (
+                        <li key={p} className="flex gap-2">
+                          <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-foreground/40" />{" "}
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   {exp.tags && exp.tags.length > 0 && (
-                    <div className="mt-5 border-t border-border/40 pt-3.5">
+                    <div className="mt-4 border-t border-border/40 pt-3">
                       <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/75">
-                        Key Projects & Work Areas
+                        Key Work
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         {exp.tags.map((t) => (
                           <span
                             key={t}
-                            className="rounded-md border border-border/60 bg-card/60 px-2 py-0.5 text-[11px] font-medium text-foreground/80"
+                            className="rounded-md border border-border/60 bg-card/60 px-2.5 py-0.5 text-[11px] font-medium text-foreground/85"
                           >
                             {t}
                           </span>

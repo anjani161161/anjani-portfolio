@@ -18,9 +18,9 @@ export const PROFILE = {
     leetcode: "https://leetcode.com/u/vHn9wOhn55/",
     instagram: "https://www.instagram.com/1616anjani_singh/",
   },
-  resumeUrl: "https://drive.google.com/file/d/1TdCY4X8OymbwHHuivcUHFek-ybPyuILO/view?usp=sharing",
+  resumeUrl: "https://drive.google.com/file/d/1aIFt2Ah0vAWyuVcrqQE4UlBoOC_0C2KE/view?usp=sharing",
   resumeDownloadUrl:
-    "https://drive.google.com/uc?export=download&id=1TdCY4X8OymbwHHuivcUHFek-ybPyuILO",
+    "https://drive.google.com/uc?export=download&id=1aIFt2Ah0vAWyuVcrqQE4UlBoOC_0C2KE",
 } as const;
 
 export const NAV_LINKS = [
@@ -92,27 +92,14 @@ export interface ExperienceItem {
 
 export const EXPERIENCES: ExperienceItem[] = [
   {
-    role: "Quantum / Machine Learning Project Developer (R&D)",
+    role: "Quantum / Machine Learning Project Developer — R&D",
     company: "Quantum Insight Labs Pvt. Ltd. — IIT Delhi",
     period: "2026 — Present",
     current: true,
     description:
-      "Currently working at Quantum Insight Labs Pvt. Ltd. at IIT Delhi on quantum technology, scientific systems, and machine learning projects. My work involves hands-on exposure to quantum hardware, quantum communication systems, scientific software, experimental data processing, and hardware-software integration.",
-    points: [
-      "QForge 24 — Hands-on work with quantum hardware and device experimentation, including interaction with the physical system and related scientific software.",
-      "Infinity — Worked with quantum technology systems involving experimentation, scientific software, simulation, and device interaction.",
-      "QKD (Quantum Key Distribution) — Worked on Quantum Key Distribution systems involving quantum communication and secure key exchange concepts, including software and hardware integration.",
-      "Machine Learning — Worked on machine learning workflows involving experimental data processing, model development, analysis, and integration with scientific/quantum systems.",
-    ],
-    tags: [
-      "QForge 24",
-      "Infinity",
-      "QKD",
-      "Quantum Computing",
-      "Machine Learning",
-      "Scientific Simulation",
-      "Device Integration",
-    ],
+      "Working on quantum technology and machine learning projects at Quantum Insight Labs, IIT Delhi, with hands-on exposure to quantum hardware, simulation, QKD, and experimental data.",
+    points: [],
+    tags: ["QForge 24", "Infinity", "QKD", "Machine Learning"],
   },
   {
     role: "Director of Technical Services",
